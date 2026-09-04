@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SWAPFIRE — منصة تبديل الحسابات</title>
+<style>
+:root{--bg:#070a10;--panel:#101722;--panel2:#0c121c;--line:#1e2b3b;--blue:#19a8ff;--blue2:#006dff;--text:#f4f8ff;--muted:#91a1b5;--ok:#31d39b;--danger:#ff5d6c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% 0,#0d2940 0,transparent 38%),var(--bg);color:var(--text);font-family:Arial,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}
+header{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;background:#070a10eF;backdrop-filter:blur(12px);z-index:4}.brand{font-size:25px;font-weight:900;letter-spacing:1px}.brand b{color:var(--blue)}
+nav button{background:none;border:0;color:var(--muted);margin-left:18px}nav button:hover{color:white}
+main{max-width:1050px;margin:auto;padding:55px 20px}.hero{text-align:center;padding:35px 0 55px}.tag{display:inline-block;border:1px solid #1c638d;color:#69caff;background:#082238;padding:8px 14px;border-radius:30px;font-size:13px}.hero h1{font-size:clamp(40px,8vw,78px);margin:18px 0 8px}.hero h1 span{color:var(--blue)}.hero p{color:var(--muted);max-width:650px;margin:0 auto 28px;line-height:1.8}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.primary,.secondary{border-radius:12px;padding:14px 22px;border:1px solid var(--line);color:white}.primary{background:linear-gradient(135deg,var(--blue2),var(--blue));border:0}.secondary{background:var(--panel)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:linear-gradient(180deg,#111a26,#0b1119);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 9px}.card p{color:var(--muted);line-height:1.7;margin:0}
+.section{display:none}.section.active{display:block}.form{max-width:700px;margin:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px}.form h2{margin-top:0}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin:12px 0}.field label{display:block;color:#c9d6e5;margin-bottom:7px;font-size:14px}.field input,.field textarea{width:100%;background:#080d15;border:1px solid var(--line);color:white;border-radius:10px;padding:12px;outline:none}.field input:focus,.field textarea:focus{border-color:var(--blue)}textarea{min-height:100px;resize:vertical}.drop{border:1px dashed #31516b;padding:20px;border-radius:12px;text-align:center;color:var(--muted)}.preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.preview img{width:85px;height:65px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.codebox{text-align:center;background:#071827;border:1px solid #14547a;border-radius:16px;padding:25px;margin-top:18px}.code{font-size:30px;letter-spacing:5px;color:#6bd0ff;font-weight:900}.notice{color:var(--muted);line-height:1.7}
+.admin{max-width:1050px;margin:auto}.login{max-width:420px;margin:30px auto}.swap{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0}.swapHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.status{font-size:12px;padding:6px 9px;border-radius:20px;background:#143426;color:#68e4b4}.data{color:#aab8c8;font-size:14px;line-height:1.7;margin-top:12px}.data img{max-width:130px;max-height:100px;object-fit:cover;border-radius:8px;margin:5px}.danger{background:#32151a;color:#ff9da6;border:1px solid #5d252d;padding:10px;border-radius:9px}.empty{text-align:center;color:var(--muted);padding:35px}
+@media(max-width:750px){.grid,.row{grid-template-columns:1fr}nav button{margin-left:5px}.hero{padding-top:20px}}
+</style>
+</head>
+<body>
+<header><div class="brand">SWAP<b>FIRE</b></div><nav><button onclick="show('home')">الرئيسية</button><button onclick="show('join')">الانضمام</button><button onclick="show('admin')">لوحة المسؤول</button></nav></header>
+
+<main>
+<section id="home" class="section active">
+<div class="hero"><span class="tag">نظام تبديل تحت إشراف المسؤول</span><h1>SWAP<span>FIRE</span></h1><p>منصة تجريبية لتنظيم عمليات تبادل حسابات الألعاب. أنشئ عملية، ارفع إثباتاتك، ثم شارك رمز العملية مع الطرف الآخر.</p><div class="actions"><button class="primary" onclick="show('create')">ابدأ عملية تبديل</button><button class="secondary" onclick="show('join')">لديّ رمز عملية</button></div></div>
+<div class="grid"><div class="card"><h3>رمز فريد</h3><p>كل عملية تحصل على رمز خاص لربط الطرفين في جلسة واحدة.</p></div><div class="card"><h3>رفع مباشر</h3><p>يمكن رفع صور الإثبات من جهازك مباشرة، مع معاينة الصور قبل الإرسال.</p></div><div class="card"><h3>مراجعة المسؤول</h3><p>كل الطلبات تحفظ محليًا وتظهر في لوحة المسؤول للمراجعة.</p></div></div>
+</section>
+
+<section id="create" class="section"><div class="form"><h2>إنشاء عملية تبديل</h2><p class="notice">أدخل معلومات التواصل وبيانات الحساب المطلوب فحصها. لا تستخدم كلمة مرور تعيد استخدامها في خدمات أخرى.</p>
+<div class="row"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email"></div><div class="field"><label>رقم الهاتف</label><input id="phone"></div></div>
+<div class="row"><div class="field"><label>طريقة التواصل</label><input id="social" placeholder="WhatsApp أو Facebook"></div><div class="field"><label>معرّف التواصل</label><input id="contact" placeholder="رقم أو اسم مستخدم"></div></div>
+<div class="field"><label>بيانات الحساب المطلوب تبديله (مثال: UID، الاسم، المستوى...)</label><textarea id="account"></textarea></div>
+<div class="field"><label>رمز/معلومة تحقق إضافية (اختياري)</label><input id="verifyInfo" placeholder="مثال: UID أو معلومة لا تكشف كلمة المرور"><small class="notice">لا تضع كلمة مرور حساب اللعبة هنا. استخدم معلومات تحقق آمنة فقط.</small></div>
+<div class="field"><label>صور إثبات الملكية</label><div class="drop"><input id="photos" type="file" accept="image/*" multiple></div><div class="preview" id="preview"></div></div>
+<button class="primary" style="width:100%" onclick="createSwap()">إرسال العملية</button><div id="created"></div></div></section>
+
+<section id="join" class="section"><div class="form"><h2>الانضمام إلى عملية</h2><p class="notice">أدخل رمز العملية الذي حصلت عليه من الطرف الآخر.</p><div class="field"><label>رمز العملية</label><input id="joinCode" placeholder="SF-XXXX-XXXX"></div><button class="primary" style="width:100%" onclick="joinSwap()">الانضمام</button><div id="joinResult"></div></div></section>
+
+<section id="admin" class="section"><div class="admin"><div class="form login" id="adminLogin"><h2>دخول المسؤول</h2><div class="field"><label>كلمة مرور لوحة المسؤول</label><input id="adminPass" type="password"></div><button class="primary" style="width:100%" onclick="adminLogin()">دخول</button><p id="adminMsg" class="notice"></p></div><div id="dashboard" style="display:none"><div class="form"><div class="swapHead"><div><h2>لوحة التحكم</h2><p class="notice">جميع عمليات التبديل المحفوظة على هذا الجهاز.</p></div><button class="secondary" onclick="logoutAdmin()">خروج</button></div></div><div id="swaps"></div></div></div></section>
+</main>
+
+<script>
+const KEY='swapfire_swaps_v1';
+let admin=false;
+function show(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='admin'&&admin) renderAdmin();scrollTo(0,0)}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
+function save(a){localStorage.setItem(KEY,JSON.stringify(a))}
+function code(){let a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='SF-';for(let block=0;block<2;block++){for(let i=0;i<4;i++)s+=a[Math.floor(Math.random()*a.length)];if(!block)s+='-'}return s}
+document.getElementById('photos').addEventListener('change',e=>{let p=document.getElementById('preview');p.innerHTML='';[...e.target.files].forEach(f=>{let r=new FileReader();r.onload=()=>{let i=document.createElement('img');i.src=r.result;p.appendChild(i)};r.readAsDataURL(f)})});
+async function createSwap(){
+ let files=[...document.getElementById('photos').files];
+ if(!document.getElementById('email').value&&!document.getElementById('phone').value)return alert('أدخل البريد أو رقم الهاتف');
+ if(!document.getElementById('account').value)return alert('أدخل بيانات الحساب');
+ let imgs=await Promise.all(files.map(f=>new Promise(res=>{let r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f)})));
+ let item={id:crypto.randomUUID(),code:code(),created:new Date().toISOString(),status:'بانتظار الطرف الثاني',participants:[{email:email.value,phone:phone.value,social:social.value,contact:contact.value,account:account.value,verifyInfo:verifyInfo.value,images:imgs}],notes:[]};
+ let a=load();a.push(item);save(a);
+ document.getElementById('created').innerHTML='<div class="codebox"><div>تم إنشاء العملية</div><div class="code">'+item.code+'</div><p class="notice">أرسل هذا الرمز للطرف الثاني. لا تنشره علنًا.</p></div>';
+}
+function joinSwap(){let c=joinCode.value.trim().toUpperCase();let a=load();let x=a.find(v=>v.code===c);if(!x)return joinResult.innerHTML='<p class="notice">لم يتم العثور على العملية.</p>';if(x.participants.length>=2)return joinResult.innerHTML='<p class="notice">هذه العملية مكتملة من ناحية المشاركين.</p>';joinResult.innerHTML=`<div class="form" style="margin-top:16px"><h3>بيانات الطرف الثاني</h3><div class="row"><div class="field"><label>البريد الإلكتروني</label><input id="jEmail" type="email"></div><div class="field"><label>رقم الهاتف</label><input id="jPhone"></div></div><div class="row"><div class="field"><label>طريقة التواصل</label><input id="jSocial" placeholder="WhatsApp أو Facebook"></div><div class="field"><label>معرّف التواصل</label><input id="jContact"></div></div><div class="field"><label>بيانات الحساب المطلوب تبديله</label><textarea id="jAccount"></textarea></div><div class="field"><label>رمز/معلومة تحقق إضافية (اختياري)</label><input id="jVerify"></div><div class="field"><label>صور إثبات الملكية</label><input id="jPhotos" type="file" accept="image/*" multiple></div><button class="primary" style="width:100%" onclick="submitJoin('${x.id}')">تأكيد الانضمام</button></div>`}
+async function submitJoin(id){let a=load(),x=a.find(v=>v.id===id);if(!x)return;let files=[...document.getElementById('jPhotos').files];let imgs=await Promise.all(files.map(f=>new Promise(res=>{let r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f)})));if(!jAccount.value)return alert('أدخل بيانات الحساب');x.participants.push({email:jEmail.value,phone:jPhone.value,social:jSocial.value,contact:jContact.value,account:jAccount.value,verifyInfo:jVerify.value,images:imgs,joinedAt:new Date().toISOString()});x.status='تم ربط الطرفين — بانتظار مراجعة المسؤول';save(a);joinResult.innerHTML='<div class="codebox"><b>تم ربط الطرفين بنجاح</b><p class="notice">أصبحت بيانات الطرفين محفوظة محليًا وتظهر للمسؤول للمراجعة.</p></div>'}
+function adminLogin(){if(adminPass.value==='554466'){admin=true;adminLogin.style.display='none';dashboard.style.display='block';renderAdmin()}else adminMsg.textContent='كلمة المرور غير صحيحة.'}
+function logoutAdmin(){admin=false;adminLogin.style.display='block';dashboard.style.display='none'}
+function renderAdmin(){let a=load();let box=document.getElementById('swaps');if(!a.length)return box.innerHTML='<div class="empty">لا توجد عمليات محفوظة حاليًا.</div>';box.innerHTML=a.slice().reverse().map((x,idx)=>{let p=x.participants[0]||{};return `<div class="swap"><div class="swapHead"><div><b>${x.code}</b><div class="notice">${new Date(x.created).toLocaleString('ar-DZ')}</div></div><span class="status">${x.status}</span></div><div class="data"><b>الطرف الأول</b><br>البريد: ${esc(p.email)}<br>الهاتف: ${esc(p.phone)}<br>التواصل: ${esc(p.social)} — ${esc(p.contact)}<br>بيانات الحساب: ${esc(p.account)}<br>معلومة التحقق: ${esc(p.verifyInfo)}<br><b>الصور:</b><br>${(p.images||[]).map(i=>`<img src="${i}">`).join('')||'لا توجد صور'}<hr>${x.participants.length>1?'✓ الطرف الثاني متصل بهذه العملية':'بانتظار الطرف الثاني'}</div><br><button class="danger" onclick="delSwap('${x.id}')">حذف العملية</button></div>`}).join('')}
+function delSwap(id){if(confirm('حذف هذه العملية من التخزين المحلي؟')){save(load().filter(x=>x.id!==id));renderAdmin()}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+</script>
+</body>
+</html>
