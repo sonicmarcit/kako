@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
+<title>SWAPFIRE — تبديل حسابات بين اللاعبين</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+:root{
+  --bg:#07090d; --surface:#0d1118; --surface2:#121720; --surface3:#171d28;
+  --line:#242c38; --line2:#303a49; --text:#f7f9fc; --muted:#8b96a7; --dim:#5f6a7b;
+  --accent:#4b8dff; --accent2:#76b0ff; --cyan:#45d9ff; --green:#40dc9a; --amber:#f0b75b; --red:#ff6f7d;
+  --radius:22px; --shadow:0 26px 80px rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Cairo,system-ui,sans-serif;overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+::selection{background:#2f6fd7;color:#fff}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 14% 8%,rgba(70,140,255,.09),transparent 27%),radial-gradient(circle at 88% 12%,rgba(69,217,255,.055),transparent 22%),linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);background-size:auto,auto,46px 46px,46px 46px;mask-image:linear-gradient(to bottom,#000 0,#000 55%,transparent 95%)}
+.topbar{position:sticky;top:0;z-index:50;height:70px;background:rgba(7,9,13,.82);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05)}
+.topbar-inner{height:100%;max-width:1180px;margin:auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{border:0;background:none;color:#fff;display:flex;align-items:center;gap:10px;padding:0}
+.brand-icon{width:38px;height:38px;border-radius:12px;position:relative;background:linear-gradient(145deg,#377fff,#1e56c0);box-shadow:0 10px 26px rgba(55,127,255,.25)}
+.brand-icon:before,.brand-icon:after{content:"";position:absolute;background:#fff;border-radius:999px}
+.brand-icon:before{width:18px;height:5px;left:9px;top:17px;transform:rotate(-35deg)}
+.brand-icon:after{width:11px;height:5px;left:19px;top:22px;transform:rotate(35deg)}
+.brand-name{font-weight:900;font-size:18px;letter-spacing:.3px}.brand-name span{color:var(--accent2)}
+.top-actions{display:flex;align-items:center;gap:6px}.top-link{border:0;background:transparent;color:#8f9aaa;padding:9px 11px;border-radius:11px;font-weight:700;font-size:12px}.top-link:hover,.top-link.active{background:#111722;color:#fff}
+.container{max-width:1180px;margin:auto;padding:0 18px 76px}.page{display:none}.page.active{display:block;animation:pageIn .18s ease}@keyframes pageIn{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* Home */
+.hero{padding:76px 0 54px;display:grid;grid-template-columns:1.02fr .98fr;gap:44px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #1f3f6e;background:#0d182a;color:#9bc4ff;border-radius:999px;font-size:11px;font-weight:800}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px rgba(64,220,154,.85)}
+.hero h1{font-size:clamp(48px,7vw,78px);line-height:1.04;letter-spacing:-3px;margin:20px 0 15px;font-weight:900}.hero h1 em{font-style:normal;color:var(--accent2)}
+.hero-desc{max-width:640px;margin:0;color:#9da7b7;font-size:14px;line-height:2.05}.hero-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:28px}
+.btn{border:1px solid var(--line);background:var(--surface2);color:#fff;border-radius:13px;padding:11px 15px;font-size:12px;font-weight:800;transition:.15s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover{border-color:var(--line2);transform:translateY(-1px)}.btn.primary{background:var(--accent);border-color:var(--accent);box-shadow:0 13px 34px rgba(75,141,255,.2)}.btn.primary:hover{background:#6099ff}.btn.ghost{background:transparent}.btn.small{padding:8px 11px;font-size:10px;border-radius:10px}.btn.danger{color:#ffb1ba;border-color:#51252e;background:#191014}
+.hero-stage{min-height:390px;display:grid;place-items:center;position:relative}.halo{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(70,141,255,.16),transparent 68%)}.ring{position:absolute;width:355px;height:180px;border:1px solid #263b5e;border-radius:50%;transform:rotate(-21deg)}.ring:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cyan);right:22px;top:7px;box-shadow:0 0 20px var(--cyan)}
+.swap-preview{width:min(420px,100%);position:relative;border:1px solid #293341;border-radius:26px;background:linear-gradient(160deg,#141a23,#0b0f15);box-shadow:var(--shadow);overflow:hidden}.swap-preview:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.055),transparent 28%,transparent 70%,rgba(75,141,255,.035));pointer-events:none}
+.preview-top{padding:17px 18px;border-bottom:1px solid #1f2732;display:flex;justify-content:space-between;align-items:center}.preview-title{font-size:11px;color:#9ca6b5;font-weight:700}.preview-status{font-size:10px;color:#7fe1ad;display:flex;align-items:center;gap:6px}
+.preview-code{margin:18px;border:1px solid #263852;background:#0a0f17;border-radius:18px;padding:18px;text-align:center}.preview-code small{font-size:9px;color:#657183}.preview-code strong{display:block;font-size:30px;letter-spacing:4px;color:#83b7ff;margin:6px 0 8px}.preview-code span{font-size:9px;color:#697689}.preview-users{padding:0 18px 18px;display:grid;grid-template-columns:1fr 1fr;gap:9px}.mini-user{border:1px solid #202834;background:#0a0e14;border-radius:14px;padding:12px}.mini-avatar{width:31px;height:31px;border-radius:10px;display:grid;place-items:center;background:#17243a;color:#85b6ff;font-size:10px;font-weight:900;margin-bottom:8px}.mini-user b{display:block;font-size:11px}.mini-user span{display:block;font-size:9px;color:#657081;margin-top:2px}.preview-foot{margin:0 18px 18px;border:1px solid #1f4937;background:#0c1913;color:#83e4b1;border-radius:12px;padding:10px;text-align:center;font-size:10px}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 58px}.quick{border:1px solid #202832;background:#0d1117;border-radius:18px;padding:16px}.quick b{font-size:12px}.quick p{font-size:10px;line-height:1.8;color:#737e8e;margin:5px 0 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:15px}.section-head h2{margin:0;font-size:23px}.section-head p{margin:4px 0 0;color:#6f7a89;font-size:11px}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.flow-card{position:relative;min-height:158px;border:1px solid #202832;background:#0d1117;border-radius:20px;padding:18px;overflow:hidden}.flow-num{font-size:44px;font-weight:900;color:#152033;position:absolute;left:14px;bottom:4px}.flow-card h3{margin:0 0 6px;font-size:14px}.flow-card p{color:#778293;font-size:10px;line-height:1.9;margin:0;max-width:85%}
+
+/* Shared form */
+.shell{max-width:860px;margin:0 auto;padding-top:34px}.card{border:1px solid var(--line);background:linear-gradient(180deg,#11161e,#0b0f15);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}.card-head{padding:22px 22px 18px;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.card-head h2{margin:0;font-size:24px}.card-head p{margin:5px 0 0;font-size:11px;color:#768192;line-height:1.8}.back{border:1px solid #27303c;background:#151a22;color:#b7bfcb;border-radius:10px;padding:8px 10px;font-size:10px;font-weight:800}
+.form{padding:22px}.step-title{display:flex;align-items:center;gap:10px;margin:2px 0 13px}.step-badge{width:27px;height:27px;border-radius:9px;background:#14233b;color:#8dbdff;display:grid;place-items:center;font-size:10px;font-weight:900}.step-title b{font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:block;font-size:10px;color:#cdd3dc;font-weight:800;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid #29313e;background:#080b10;color:#fff;border-radius:12px;padding:11px 12px;outline:0;font-size:12px}.field input::placeholder,.field textarea::placeholder{color:#566172}.field input:focus,.field textarea:focus,.field select:focus{border-color:#3b73ca;box-shadow:0 0 0 3px rgba(59,115,202,.12)}textarea{min-height:94px;resize:vertical}.hint{margin-top:5px;color:#606b7b;font-size:9px;line-height:1.8}
+.security-note{margin:0 0 15px;border:1px solid #49391e;background:#19140c;color:#cfbd86;border-radius:12px;padding:10px 12px;font-size:10px;line-height:1.8}.divider{height:1px;background:#1e2630;margin:22px 0}.upload-box{border:1px dashed #374250;background:#090d13;border-radius:16px;padding:18px;text-align:center}.upload-box b{font-size:11px}.upload-box p{font-size:9px;color:#687384;margin:4px 0 8px}.upload-box input{width:100%;font-size:10px;color:#7f8998}.previews{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}.preview-img{position:relative}.preview-img img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px;border:1px solid #27313c}.preview-img button{position:absolute;top:4px;left:4px;width:22px;height:22px;border:0;border-radius:7px;background:rgba(0,0,0,.8);color:#fff;font-size:11px}
+.form-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:22px}.form-footer small{color:#616c7c;font-size:9px;line-height:1.8}.form-footer .actions{display:flex;gap:7px}.result{padding:22px;text-align:center;border-top:1px solid #1e2630;background:#0c1118}.result-code{display:inline-block;border:1px solid #26466f;background:#0b1422;border-radius:18px;padding:14px 18px;margin:5px 0 11px}.result-code small{display:block;color:#63758c;font-size:8px}.result-code strong{display:block;color:#85baff;font-size:31px;letter-spacing:4px;margin-top:4px}.result p{color:#7c8798;font-size:10px;line-height:1.8;margin:0 auto 12px;max-width:510px}.result-actions{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
+
+/* Join */
+.join-start{max-width:640px;margin:65px auto}.code-entry{padding:28px}.code-entry h2{margin:0;font-size:28px}.code-entry p{color:#778293;font-size:11px;line-height:1.8;margin:5px 0 18px}.code-row{display:flex;gap:8px}.code-row input{text-align:center;text-transform:uppercase;letter-spacing:4px;font-size:19px;font-weight:900}.join-feedback{margin-top:12px;border-radius:13px;padding:11px 12px;font-size:10px;line-height:1.8;border:1px solid #29313d;background:#0b1017;color:#7d8999}.join-feedback.ok{border-color:#23563e;background:#0c1812;color:#82dfad}.join-feedback.bad{border-color:#5d2831;background:#1b1013;color:#ff9fa9}
+
+/* Status / track */
+.track{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}.track-step{position:relative;border:1px solid #202934;background:#0d1118;border-radius:13px;padding:11px}.track-step small{display:block;color:#596577;font-size:8px}.track-step b{display:block;font-size:10px;margin-top:2px}.track-step.on{border-color:#2d5590;background:#0e1725}.track-step.on small{color:#79afff}.track-step.done{border-color:#22563e;background:#0c1812}.track-step.done small{color:#77dfaa}
+
+/* Admin */
+.admin-wrap{padding-top:32px}.admin-login{max-width:420px;margin:80px auto}.lock{width:56px;height:56px;margin:0 auto 13px;border-radius:17px;background:#15213a;color:#8ab9ff;display:grid;place-items:center;font-weight:900;font-size:18px}.admin-login h2{text-align:center;margin:0;font-size:24px}.admin-login p{text-align:center;color:#737e8e;font-size:10px;line-height:1.8;margin:5px 0 18px}.admin-login .field{margin-bottom:9px}.admin-login .btn{width:100%}.admin-board{display:none}.admin-board.open{display:block}.admin-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:15px}.admin-head h2{margin:0;font-size:24px}.admin-head p{margin:4px 0 0;color:#727d8d;font-size:10px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:11px}.stat{border:1px solid #202833;background:#0d1118;border-radius:16px;padding:13px}.stat small{display:block;color:#687486;font-size:9px}.stat b{display:block;font-size:23px;margin-top:3px}.tools{border:1px solid #202833;background:#0d1118;border-radius:16px;padding:10px;display:flex;gap:7px;margin-bottom:11px}.tools input,.tools select{flex:1;min-width:0;border:1px solid #28313d;background:#080b10;color:#fff;border-radius:10px;padding:9px 10px;font-size:10px;outline:0}.ops{display:grid;gap:9px}.op{border:1px solid #232b35;background:#0c1016;border-radius:18px;overflow:hidden}.op-head{padding:14px 15px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.op-code{font-size:14px;font-weight:900;letter-spacing:2px;color:#82b3ff}.op-date{font-size:8px;color:#596474;margin-top:2px}.badge{padding:5px 8px;border-radius:999px;font-size:8px;font-weight:800;background:#132138;border:1px solid #28456d;color:#91bcff}.badge.green{background:#0d1c14;border-color:#24533c;color:#7fe1ad}.badge.amber{background:#1b160d;border-color:#54421e;color:#e9c277}.badge.red{background:#201013;border-color:#592830;color:#ff9ea8}.op-body{padding:0 15px 15px}.people{display:grid;grid-template-columns:1fr 1fr;gap:8px}.person{border:1px solid #1e2630;background:#090d12;border-radius:13px;padding:12px}.person-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.person h4{margin:0;font-size:11px}.person p{margin:3px 0;font-size:8px;color:#758090;word-break:break-word;line-height:1.7}.thumbs{display:flex;gap:5px;margin-top:7px;overflow:auto}.thumbs img{width:52px;height:42px;object-fit:cover;border-radius:7px;border:1px solid #202935;flex:none}.op-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.op-actions .btn{font-size:9px;padding:7px 9px}.empty{border:1px dashed #303947;border-radius:16px;padding:28px;text-align:center;color:#687384;font-size:10px}
+
+/* Dialog / toast */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}.modal.open{display:flex}.modal-card{width:min(760px,100%);max-height:88vh;overflow:auto;border:1px solid #2a3441;background:#0d1219;border-radius:22px;box-shadow:var(--shadow)}.modal-head{position:sticky;top:0;padding:15px 17px;background:rgba(13,18,25,.94);backdrop-filter:blur(14px);border-bottom:1px solid #202833;display:flex;justify-content:space-between;align-items:center;z-index:2}.modal-head h3{margin:0;font-size:14px}.modal-close{border:1px solid #2b3441;background:#151b23;color:#c8ced7;border-radius:9px;width:31px;height:31px}.modal-body{padding:17px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-box{border:1px solid #202833;background:#0a0e13;border-radius:14px;padding:12px}.detail-box h4{margin:0 0 8px;font-size:10px}.detail-box p{margin:3px 0;color:#788394;font-size:9px;line-height:1.8;word-break:break-word}.detail-images{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}.detail-images img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px;border:1px solid #202833}
+.toast{position:fixed;right:18px;bottom:18px;z-index:120;max-width:360px;padding:11px 14px;border-radius:12px;border:1px solid #333d4a;background:#161c25;color:#f4f6f9;box-shadow:var(--shadow);font-size:10px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.18s}.toast.show{opacity:1;transform:none}
+
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-stage{min-height:360px}.quick-grid,.flow{grid-template-columns:1fr}.track{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.topbar{height:auto}.topbar-inner{padding:10px 12px;align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.top-link{font-size:9px;padding:7px 8px}.container{padding:0 12px 50px}.hero{padding-top:34px}.hero h1{font-size:48px;letter-spacing:-2px}.hero-desc{font-size:12px}.hero-actions{margin-top:20px}.swap-preview{transform:none}.card-head{padding:18px 16px}.card-head h2{font-size:20px}.form{padding:17px}.grid,.people,.detail-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.previews{grid-template-columns:repeat(3,1fr)}.form-footer{flex-direction:column;align-items:stretch}.form-footer .actions,.form-footer .actions .btn{width:100%}.code-row{flex-direction:column}.join-start{margin-top:36px}.stats{grid-template-columns:1fr 1fr}.tools{flex-direction:column}.op-head{flex-direction:column}.detail-images{grid-template-columns:repeat(3,1fr)}.hero-stage .ring{width:290px}.hero-stage .halo{width:280px}.toast{left:12px;right:12px;bottom:12px;max-width:none;text-align:center}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="brand" onclick="navigate('home')" aria-label="SWAPFIRE">
+      <span class="brand-icon"></span><span class="brand-name">SWAP<span>FIRE</span></span>
+    </button>
+    <nav class="top-actions">
+      <button class="top-link active" data-page="home" onclick="navigate('home')">الرئيسية</button>
+      <button class="top-link" data-page="create" onclick="navigate('create')">إنشاء تبديل</button>
+      <button class="top-link" data-page="join" onclick="navigate('join')">دخول برمز</button>
+      <button class="top-link" data-page="admin" onclick="navigate('admin')">المسؤول</button>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div>
+        <span class="eyebrow"><i class="live-dot"></i> خدمة مجتمع اللاعبين</span>
+        <h1>تبادل الحسابات<br><em>بخطوات واضحة.</em></h1>
+        <p class="hero-desc">أنشئ عملية تبديل خاصة، أرسل الرمز للشخص الثاني، واجعل الطرفين يظهران داخل نفس العملية. المسؤول يتابع البيانات، الصور، والحالة من مكان واحد.</p>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="navigate('create')">ابدأ عملية تبديل <span>←</span></button>
+          <button class="btn ghost" onclick="navigate('join')">عندي رمز</button>
+        </div>
+      </div>
+      <div class="hero-stage">
+        <div class="halo"></div><div class="ring"></div>
+        <div class="swap-preview">
+          <div class="preview-top"><span class="preview-title">عملية تبديل</span><span class="preview-status"><i class="live-dot"></i> مفتوحة</span></div>
+          <div class="preview-code"><small>رمز العملية</small><strong>SF-4K8M</strong><span>يشارك مع الطرف الثاني فقط</span></div>
+          <div class="preview-users">
+            <div class="mini-user"><div class="mini-avatar">01</div><b>الطرف الأول</b><span>تم إرسال البيانات</span></div>
+            <div class="mini-user"><div class="mini-avatar">02</div><b>الطرف الثاني</b><span>ينضم بالرمز</span></div>
+          </div>
+          <div class="preview-foot">المسؤول يتابع العملية من البداية إلى الإكمال</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-grid">
+      <div class="quick"><b>رمز واحد لكل تبديل</b><p>كل عملية تحصل على رمز مستقل. لا تحتاج إلى إنشاء حساب عام حتى تبدأ.</p></div>
+      <div class="quick"><b>الصور من جهازك</b><p>ارفع صور إثبات الحساب مباشرة من الهاتف أو الكمبيوتر مع معاينة قبل الإرسال.</p></div>
+      <div class="quick"><b>المسؤول يرى الصورة كاملة</b><p>بعد دخول الطرف الثاني تظهر العملية كاملة في لوحة المسؤول للمراجعة والمتابعة.</p></div>
+    </div>
+
+    <div class="section-head"><div><h2>طريقة التبديل</h2><p>المسار الذي بنيت عليه التجربة</p></div></div>
+    <div class="flow">
+      <article class="flow-card"><span class="flow-num">01</span><h3>أنشئ العملية</h3><p>أدخل بيانات التواصل، معرّف الحساب، الاسم، وارفع صورك.</p></article>
+      <article class="flow-card"><span class="flow-num">02</span><h3>شارك الرمز</h3><p>سيظهر رمز فريد. الشخص الآخر يستخدم الرمز نفسه للدخول للعملية.</p></article>
+      <article class="flow-card"><span class="flow-num">03</span><h3>راجع وأكمل</h3><p>بعد اكتمال الطرفين، يراجع المسؤول البيانات ويتابع الحالة حتى النهاية.</p></article>
+    </div>
+  </section>
+
+  <section id="page-create" class="page">
+    <div class="shell">
+      <div class="card">
+        <div class="card-head"><div><h2>إنشاء عملية تبديل</h2><p>أنت الطرف الأول. أدخل بياناتك ثم أرسل الرمز للشخص الذي ستتبادل معه.</p></div><button class="back" onclick="navigate('home')">رجوع</button></div>
+        <form id="createForm" class="form" onsubmit="createSwap(event)">
+          <div class="step-title"><span class="step-badge">01</span><b>بيانات التواصل</b></div>
+          <div class="grid">
+            <div class="field"><label for="cEmail">البريد الإلكتروني</label><input id="cEmail" type="email" placeholder="name@example.com" required></div>
+            <div class="field"><label for="cPhone">رقم الهاتف</label><input id="cPhone" type="tel" placeholder="05xxxxxxxx" required></div>
+            <div class="field"><label for="cMethod">طريقة التواصل معك</label><select id="cMethod"><option>واتساب</option><option>فيسبوك</option><option>رقم الهاتف</option></select></div>
+            <div class="field"><label for="cContact">رقم / اسم التواصل</label><input id="cContact" placeholder="رقم واتساب أو اسم الحساب" required></div>
+          </div>
+          <div class="divider"></div>
+          <div class="step-title"><span class="step-badge">02</span><b>الحساب الذي ستبادله</b></div>
+          <div class="security-note">لا تضع كلمة مرور الحساب داخل الصفحة. استخدم UID، اسم الحساب، وصور إثبات الملكية والمعلومة غير الحساسة التي يحتاجها المسؤول.</div>
+          <div class="grid">
+            <div class="field"><label for="cUid">UID الحساب</label><input id="cUid" placeholder="مثال: 123456789" required></div>
+            <div class="field"><label for="cNick">اسم الحساب</label><input id="cNick" placeholder="اسم اللاعب داخل اللعبة" required></div>
+            <div class="field full"><label for="cVerify">معلومة تحقق إضافية (اختياري)</label><textarea id="cVerify" placeholder="مثلاً معلومة عامة عن الحساب تساعد المسؤول على التحقق"></textarea><div class="hint">لا تكتب كلمة مرور، رمز تحقق، أو سر يمكنه الدخول للحساب.</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="step-title"><span class="step-badge">03</span><b>صور الحساب</b></div>
+          <div class="upload-box"><b>ارفع صور الإثبات من جهازك</b><p>حتى 8 صور. الصور تُضغط محليًا قبل الحفظ في النسخة التجريبية.</p><input id="cImages" type="file" accept="image/*" multiple></div>
+          <div id="cPreview" class="previews"></div>
+          <div class="form-footer"><small>بمجرد الإرسال ستظهر لك شاشة الرمز.<br>لا تنشر الرمز علنًا.</small><div class="actions"><button type="submit" class="btn primary">إنشاء العملية</button></div></div>
+        </form>
+        <div id="createResult" class="result hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-join" class="page">
+    <div id="joinEntry" class="join-start">
+      <div class="card code-entry">
+        <h2>ادخل إلى عملية موجودة</h2>
+        <p>اكتب الرمز الذي أرسله لك الطرف الأول. عندما يكون الرمز صحيحًا سيظهر نموذج الطرف الثاني.</p>
+        <div class="code-row"><input id="joinCode" maxlength="11" placeholder="SF-XXXX-XXXX" autocomplete="off"><button class="btn primary" onclick="lookupSwap()">فتح العملية</button></div>
+        <div id="joinFeedback" class="join-feedback">الرمز يفتح عملية التبديل نفسها، وليس حسابًا عامًا.</div>
+      </div>
+    </div>
+    <div id="joinFormWrap" class="shell hidden">
+      <div class="card">
+        <div class="card-head"><div><h2>أكمل بيانات الطرف الثاني</h2><p>الرمز: <strong id="joinCodeLabel"></strong></p></div><button class="back" onclick="resetJoin()">تغيير الرمز</button></div>
+        <form id="joinForm" class="form" onsubmit="submitJoin(event)">
+          <div class="step-title"><span class="step-badge">01</span><b>بيانات التواصل</b></div>
+          <div class="grid">
+            <div class="field"><label for="jEmail">البريد الإلكتروني</label><input id="jEmail" type="email" required></div>
+            <div class="field"><label for="jPhone">رقم الهاتف</label><input id="jPhone" type="tel" required></div>
+            <div class="field"><label for="jMethod">طريقة التواصل</label><select id="jMethod"><option>واتساب</option><option>فيسبوك</option><option>رقم الهاتف</option></select></div>
+            <div class="field"><label for="jContact">رقم / اسم التواصل</label><input id="jContact" required></div>
+          </div>
+          <div class="divider"></div>
+          <div class="step-title"><span class="step-badge">02</span><b>حساب الطرف الثاني</b></div>
+          <div class="security-note">نفس القاعدة هنا: لا تكتب كلمة مرور الحساب. نستخدم معلومات الملكية والصور للمراجعة.</div>
+          <div class="grid">
+            <div class="field"><label for="jUid">UID الحساب</label><input id="jUid" required></div>
+            <div class="field"><label for="jNick">اسم الحساب</label><input id="jNick" required></div>
+            <div class="field full"><label for="jVerify">معلومة تحقق إضافية (اختياري)</label><textarea id="jVerify"></textarea></div>
+          </div>
+          <div class="divider"></div>
+          <div class="step-title"><span class="step-badge">03</span><b>صور الحساب</b></div>
+          <div class="upload-box"><b>ارفع صور الإثبات من جهازك</b><p>حتى 8 صور مع معاينة مباشرة.</p><input id="jImages" type="file" accept="image/*" multiple></div>
+          <div id="jPreview" class="previews"></div>
+          <div class="form-footer"><small>بعد التأكيد ستصبح العملية «تم الربط» وتظهر للمسؤول.</small><div class="actions"><button type="submit" class="btn primary">تأكيد الانضمام</button></div></div>
+        </form>
+        <div id="joinResult" class="result hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-admin" class="page">
+    <div class="admin-wrap">
+      <div id="adminLogin" class="card admin-login"><div class="lock">SF</div><h2>لوحة المسؤول</h2><p>لوحة خاصة بمتابعة عمليات التبديل. في هذه النسخة كلمة المرور محلية وليست حماية إنتاجية.</p><div class="field"><label for="adminPass">كلمة المرور</label><input id="adminPass" type="password" inputmode="numeric" placeholder="••••••" autocomplete="off"></div><button class="btn primary" onclick="loginAdmin()">دخول إلى العمليات</button></div>
+      <div id="adminBoard" class="admin-board">
+        <div class="admin-head"><div><h2>عمليات المجتمع</h2><p>ابحث، افتح تفاصيل العملية، ثم حدّث الحالة حسب المراجعة.</p></div><div class="actions"><button class="btn small" onclick="exportData()">تصدير نسخة</button><button class="btn small danger" onclick="logoutAdmin()">خروج</button></div></div>
+        <div class="stats"><div class="stat"><small>كل العمليات</small><b id="statAll">0</b></div><div class="stat"><small>بانتظار الطرف الثاني</small><b id="statWaiting">0</b></div><div class="stat"><small>تم الربط</small><b id="statMatched">0</b></div><div class="stat"><small>مكتملة</small><b id="statDone">0</b></div></div>
+        <div class="tools"><input id="adminSearch" placeholder="بحث بالرمز، UID، البريد أو الاسم" oninput="renderAdmin()"><select id="adminFilter" onchange="renderAdmin()"><option value="all">كل الحالات</option><option value="waiting">بانتظار الطرف الثاني</option><option value="matched">تم الربط</option><option value="verified">تم التحقق</option><option value="done">مكتملة</option><option value="disputed">نزاع</option></select></div>
+        <div id="ops" class="ops"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="modal" class="modal" onclick="closeModal(event)"><div class="modal-card"><div class="modal-head"><h3 id="modalTitle">تفاصيل العملية</h3><button class="modal-close" onclick="hideModal()">×</button></div><div id="modalBody" class="modal-body"></div></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+'use strict';
+const STORAGE_KEY='swapfire_pro_v1';
+const ADMIN_PASSWORD='554466';
+let joinTarget=null;
+let toastTimer=null;
+let imageState={create:[],join:[]};
+const STATUS={waiting:'بانتظار الطرف الثاني',matched:'تم الربط',verified:'تم التحقق',done:'مكتملة',disputed:'نزاع'};
+
+function readAll(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]}}
+function writeAll(v){localStorage.setItem(STORAGE_KEY,JSON.stringify(v))}
+function val(id){return (document.getElementById(id)?.value||'').trim()}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function uid(){return 'op_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
+function makeCode(){let c;do{const a=Math.random().toString(36).slice(2,6).toUpperCase();const b=Math.random().toString(36).slice(2,6).toUpperCase();c=`SF-${a}-${b}`}while(readAll().some(x=>x.code===c));return c}
+function notify(text){clearTimeout(toastTimer);const el=document.getElementById('toast');el.textContent=text;el.classList.add('show');toastTimer=setTimeout(()=>el.classList.remove('show'),2600)}
+function navigate(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');document.querySelectorAll('.top-link').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});if(page==='admin'&&sessionStorage.getItem('sf_admin')==='1')openAdmin()}
+function copyText(text){if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>notify('تم نسخ الرمز')).catch(()=>fallbackCopy(text))}else fallbackCopy(text)}
+function fallbackCopy(text){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy');notify('تم نسخ الرمز')}catch{notify(text)}t.remove()}
+function normalizeCode(el){let x=el.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);el.value=x.length>4?`SF-${x.slice(0,4)}-${x.slice(4)}`:(x.length>2?`SF-${x.slice(2)}`:x)}
+
+document.getElementById('joinCode').addEventListener('input',e=>normalizeCode(e.target));
+
+function setupImagePicker(inputId, previewId, bucket){
+  const input=document.getElementById(inputId);input.addEventListener('change',async()=>{
+    const files=[...input.files].slice(0,8);
+    imageState[bucket]=[];
+    for(const f of files){if(!f.type.startsWith('image/'))continue; if(f.size>12*1024*1024){notify(`الصورة ${f.name} كبيرة جدًا`);continue} const url=await compressImage(f);imageState[bucket].push({name:f.name,url})}
+    renderPreviews(previewId,bucket);
+    if(files.length>8)notify('تم اختيار أول 8 صور فقط');
+  });
+}
+function compressImage(file,max=1200){return new Promise((resolve,reject)=>{const r=new FileReader();r.onerror=reject;r.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{let w=img.width,h=img.height;if(w>max||h>max){const k=Math.min(max/w,max/h);w=Math.max(1,Math.round(w*k));h=Math.max(1,Math.round(h*k))}const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',.82))};img.src=r.result};r.readAsDataURL(file)})}
+function renderPreviews(previewId,bucket){const out=document.getElementById(previewId);out.innerHTML='';imageState[bucket].forEach((im,i)=>{const wrap=document.createElement('div');wrap.className='preview-img';wrap.innerHTML=`<img src="${im.url}" alt=""><button type="button" aria-label="إزالة">×</button>`;wrap.querySelector('button').onclick=()=>{imageState[bucket].splice(i,1);renderPreviews(previewId,bucket)};out.appendChild(wrap)})}
+setupImagePicker('cImages','cPreview','create');
+setupImagePicker('jImages','jPreview','join');
+
+function buildParticipant(prefix,role,images){return {role,email:val(prefix+'Email'),phone:val(prefix+'Phone'),method:val(prefix+'Method'),contact:val(prefix+'Contact'),uid:val(prefix+'Uid'),nick:val(prefix+'Nick'),verify:val(prefix+'Verify'),images:[...images]}}
+function createSwap(e){e.preventDefault();const p=buildParticipant('c','الطرف الأول',imageState.create);const item={id:uid(),code:makeCode(),created:new Date().toISOString(),status:'waiting',participants:[p]};const all=readAll();all.unshift(item);try{writeAll(all)}catch{notify('مساحة التخزين غير كافية — قلل عدد الصور');return}e.target.classList.add('hidden');const result=document.getElementById('createResult');result.classList.remove('hidden');result.innerHTML=`<div>تم إنشاء عملية التبديل</div><div class="result-code"><small>رمزك الخاص</small><strong>${item.code}</strong></div><p>أرسل هذا الرمز إلى الطرف الثاني فقط. لن يعرف أي شخص العملية من الرمز دون وجوده داخل نفس الجهاز في هذه النسخة التجريبية.</p><div class="result-actions"><button class="btn primary" onclick="copyText('${item.code}')">نسخ الرمز</button><button class="btn" onclick="viewOperation('${item.id}')">معاينة العملية</button><button class="btn" onclick="navigate('home')">العودة للرئيسية</button></div>`;notify('تم إنشاء العملية بنجاح');imageState.create=[];document.getElementById('cPreview').innerHTML=''}
+
+function lookupSwap(){const raw=val('joinCode').toUpperCase();const feedback=document.getElementById('joinFeedback');const item=readAll().find(x=>x.code===raw);if(!item){feedback.className='join-feedback bad';feedback.innerHTML='<b>الرمز غير موجود.</b><br>تأكد من كتابة الرمز كما أُرسل لك.';return}if(item.participants.length>=2){feedback.className='join-feedback bad';feedback.innerHTML='<b>هذه العملية اكتملت بالطرفين.</b><br>لا يمكن إضافة طرف ثالث.';return}joinTarget=item.code;document.getElementById('joinEntry').classList.add('hidden');document.getElementById('joinFormWrap').classList.remove('hidden');document.getElementById('joinCodeLabel').textContent=item.code;window.scrollTo({top:0,behavior:'smooth'});notify('تم العثور على العملية')}
+function resetJoin(){joinTarget=null;document.getElementById('joinEntry').classList.remove('hidden');document.getElementById('joinFormWrap').classList.add('hidden');document.getElementById('joinFeedback').className='join-feedback';document.getElementById('joinFeedback').textContent='الرمز يفتح عملية التبديل نفسها، وليس حسابًا عامًا.';document.getElementById('joinCode').value='';document.getElementById('joinForm').reset();document.getElementById('joinResult').classList.add('hidden');document.getElementById('joinForm').classList.remove('hidden');imageState.join=[];document.getElementById('jPreview').innerHTML=''}
+function submitJoin(e){e.preventDefault();if(!joinTarget){notify('أدخل الرمز أولاً');return}const all=readAll();const item=all.find(x=>x.code===joinTarget);if(!item||item.participants.length>=2){notify('تعذر العثور على العملية');return}item.participants.push(buildParticipant('j','الطرف الثاني',imageState.join));item.status='matched';try{writeAll(all)}catch{notify('مساحة التخزين غير كافية — قلل عدد الصور');return}e.target.classList.add('hidden');const result=document.getElementById('joinResult');result.classList.remove('hidden');result.innerHTML=`<div>تم ربط الطرفين</div><div class="result-code"><small>العملية</small><strong>${item.code}</strong></div><p>العملية الآن بحالة «تم الربط». في النسخة الحقيقية يجب مزامنة هذه العملية مع خادم حتى تصل للطرفين على أجهزة مختلفة.</p><div class="result-actions"><button class="btn primary" onclick="copyText('${item.code}')">نسخ الرمز</button><button class="btn" onclick="navigate('home')">تم</button></div>`;notify('تم الانضمام إلى العملية');imageState.join=[];document.getElementById('jPreview').innerHTML=''}
+
+function loginAdmin(){if(val('adminPass')===ADMIN_PASSWORD){sessionStorage.setItem('sf_admin','1');openAdmin();notify('تم فتح لوحة المسؤول')}else notify('كلمة المرور غير صحيحة')}
+function logoutAdmin(){sessionStorage.removeItem('sf_admin');document.getElementById('adminBoard').classList.remove('open');document.getElementById('adminLogin').style.display='block';document.getElementById('adminPass').value='';notify('تم تسجيل الخروج')}
+function openAdmin(){document.getElementById('adminLogin').style.display='none';document.getElementById('adminBoard').classList.add('open');renderAdmin()}
+function renderAdmin(){if(sessionStorage.getItem('sf_admin')!=='1')return;const all=readAll();document.getElementById('statAll').textContent=all.length;document.getElementById('statWaiting').textContent=all.filter(x=>x.status==='waiting').length;document.getElementById('statMatched').textContent=all.filter(x=>x.status==='matched').length;document.getElementById('statDone').textContent=all.filter(x=>x.status==='done').length;const q=val('adminSearch').toLowerCase();const f=val('adminFilter');const list=all.filter(x=>(f==='all'||x.status===f)&&(!q||JSON.stringify(x).toLowerCase().includes(q)));const ops=document.getElementById('ops');if(!list.length){ops.innerHTML='<div class="empty">لا توجد عمليات مطابقة للبحث أو الفلتر الحالي.</div>';return}ops.innerHTML=list.map(renderOperationCard).join('')}
+function badgeClass(s){return s==='done'||s==='verified'?'green':s==='disputed'?'red':s==='matched'?'amber':''}
+function renderOperationCard(x){const people=x.participants.map((p,i)=>{const imgs=(p.images||[]).map(im=>`<img src="${im.url}" alt="صورة إثبات">`).join('');return `<div class="person"><div class="person-top"><h4>الطرف ${i+1}</h4><span style="font-size:8px;color:#617083">${p.method||''}</span></div><p>البريد: ${esc(p.email)}</p><p>الهاتف: ${esc(p.phone)}</p><p>التواصل: ${esc(p.contact)}</p><p>UID: ${esc(p.uid)}</p><p>الاسم: ${esc(p.nick)}</p><p>التحقق: ${esc(p.verify||'—')}</p><div class="thumbs">${imgs||'<span style="font-size:8px;color:#566173">بدون صور</span>'}</div></div>`}).join('');return `<article class="op"><div class="op-head"><div><div class="op-code">${x.code}</div><div class="op-date">${new Date(x.created).toLocaleString('ar-DZ')}</div></div><span class="badge ${badgeClass(x.status)}">${STATUS[x.status]||x.status}</span></div><div class="op-body"><div class="track">${track(x.status)}</div><div class="people">${people}</div><div class="op-actions"><button class="btn small" onclick="viewOperation('${x.id}')">فتح التفاصيل</button><button class="btn small" onclick="setStatus('${x.id}','verified')">تم التحقق</button><button class="btn small" onclick="setStatus('${x.id}','done')">إكمال</button><button class="btn small" onclick="setStatus('${x.id}','disputed')">نزاع</button><button class="btn small danger" onclick="deleteOperation('${x.id}')">حذف</button></div></div></article>`}
+function track(status){const steps=[['waiting','استقبال'],['matched','الطرفان'],['verified','تحقق'],['done','إكمال']];const current=steps.findIndex(s=>s[0]===status);return steps.map((s,i)=>`<div class="track-step ${status==='disputed'?'':i<current?'done':i===current?'on':''}"><small>0${i+1}</small><b>${s[1]}</b></div>`).join('')}
+function setStatus(id,status){const all=readAll();const item=all.find(x=>x.id===id);if(!item)return;item.status=status;writeAll(all);renderAdmin();notify(`تم تغيير الحالة إلى: ${STATUS[status]}`)}
+function deleteOperation(id){if(!confirm('سيتم حذف العملية من هذا الجهاز نهائيًا. هل تريد المتابعة؟'))return;writeAll(readAll().filter(x=>x.id!==id));renderAdmin();notify('تم حذف العملية')}
+function viewOperation(id){const x=readAll().find(z=>z.id===id);if(!x)return;document.getElementById('modalTitle').textContent=`تفاصيل ${x.code}`;document.getElementById('modalBody').innerHTML=`<div class="detail-grid">${x.participants.map((p,i)=>`<div class="detail-box"><h4>الطرف ${i+1}</h4><p><b>البريد:</b> ${esc(p.email)}</p><p><b>الهاتف:</b> ${esc(p.phone)}</p><p><b>التواصل:</b> ${esc(p.method)} — ${esc(p.contact)}</p><p><b>UID:</b> ${esc(p.uid)}</p><p><b>الاسم:</b> ${esc(p.nick)}</p><p><b>معلومة التحقق:</b> ${esc(p.verify||'—')}</p><div class="detail-images">${(p.images||[]).map(im=>`<img src="${im.url}" alt="صورة الحساب">`).join('')||'<span style="font-size:9px;color:#5d697a">لا توجد صور</span>'}</div></div>`).join('')}</div><div style="margin-top:10px;border:1px solid #202833;background:#0a0e13;border-radius:14px;padding:12px"><p style="margin:0;color:#778394;font-size:9px">الحالة الحالية: <b style="color:#bfc7d2">${STATUS[x.status]||x.status}</b></p><p style="margin:4px 0 0;color:#566173;font-size:8px">تاريخ الإنشاء: ${new Date(x.created).toLocaleString('ar-DZ')}</p></div>`;document.getElementById('modal').classList.add('open')}
+function closeModal(e){if(e.target.id==='modal')hideModal()}function hideModal(){document.getElementById('modal').classList.remove('open')}
+function exportData(){const data=JSON.stringify(readAll(),null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`swapfire-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);notify('تم تصدير نسخة من العمليات')}
+
+document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')loginAdmin()});
+if(sessionStorage.getItem('sf_admin')==='1')openAdmin();
+</script>
+</body>
+</html>
